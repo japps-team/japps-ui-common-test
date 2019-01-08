@@ -32,9 +32,9 @@ public class TestSpeech {
             /**
              * This is a speech text test
              */
-            DesktopApp.init("test", new String[]{ "reconfigure"});
-            Path p =Resources.getSpeech("Esta es una prueba");
-            Sound.play(p);
+            DesktopApp.init("test", new String[]{});
+            Path p =Resources.getSpeech("Esta es una prueba de sonido con una ventana que mostrara un gif con el espectro de sonido");
+            Sound.playInWindow(p);
     }
     
 }

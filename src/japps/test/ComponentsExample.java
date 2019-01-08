@@ -17,14 +17,18 @@
 package japps.test;
 
 import japps.ui.DesktopApp;
+import japps.ui.component.AccordionPanel;
 import japps.ui.component.Button;
 import japps.ui.component.ComboBox;
 import japps.ui.component.DateField;
+import japps.ui.component.Dialogs;
 import japps.ui.component.FileField;
 import japps.ui.component.ImageComponent;
 import japps.ui.component.Label;
 import japps.ui.component.Panel;
+import japps.ui.component.SelectionGroup;
 import japps.ui.component.TextField;
+import japps.ui.component.ToggleButton;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import static japps.ui.util.Resources.*;
@@ -41,22 +45,21 @@ public class ComponentsExample {
     
     public static void main(String[] args) {
         DesktopApp.init("test", args) ;
-        Panel main = build();
+        JComponent main = build();
         DesktopApp.start(main);
     }
     
-    public static Panel build(){
+    public static JComponent build(){
         
-        Panel main = new Panel();
-        Panel fields = new Panel();
-        Panel other = new Panel();
+        AccordionPanel main = new AccordionPanel();
+
         
-        fields.setGroupName("fields");
-        other.setGroupName("others");
         
         DateField date  = new DateField();
-        Component text  = new TextField();
+        TextField text  = new TextField();
+        text.setToolTipText("Este es otro text field");
         TextField text2  = new TextField();
+        text2.setToolTipText("Este es un text field, usted debe ingresar un texto aqui, esta descripción es un tool tip text que puede visualizarse en el texto");
         text2.setMultiline(true);
         FileField file1 = new FileField(FileField.MODE_FILE_SINGLE, FileField.TYPE_OPEN);
         FileField file2 = new FileField(FileField.MODE_FILE_SINGLE, FileField.TYPE_SAVE);
@@ -71,11 +74,11 @@ public class ComponentsExample {
         file10.setToolTipText("Este es el campo de archivo 10");
         
         Component label = new Label("Label de prueba");
-        Button button = new Button((e)->{ JOptionPane.showMessageDialog(other, "Mensaje de prueba"); });
+        Button button = new Button((e)->{ Dialogs.message("Test", "Mensaje de prueba"); });
         button.setImage(new ImageIcon("res/img/great.png").getImage(),30,30);
         button.setToolTipText("Este es el botón uno");
         
-        Button button2 = new Button("Button 2",(e)->{ JOptionPane.showMessageDialog(other, "Mensaje de prueba 2");});
+        Button button2 = new Button("Button 2",(e)->{ Dialogs.message("Test", "Mensaje de prueba 2");});
         button2.setImage(icon("cell.png"),40,40);
         button2.setToolTipText("Este es el botón 2");
         
@@ -93,7 +96,15 @@ public class ComponentsExample {
         image.setImage(Util.readImage("res/img/great.png"));
         //image.setPreferredSize(new Dimension(100, 100));
         
-        fields.setComponents(new Component[][]{
+        ToggleButton bg1 = new ToggleButton("1", null);
+        ToggleButton bg2 = new ToggleButton("2", null);
+        ToggleButton bg3 = new ToggleButton("3", null);
+        SelectionGroup group = new SelectionGroup();
+        group.add(bg1);
+        group.add(bg2);
+        group.add(bg3);
+        
+        main.addGroup("Field components",new Component[][]{
             { date,   text,   text2 },
             { file1,  file2,  text2 },
             { file3,  file3,  file4 },
@@ -102,16 +113,13 @@ public class ComponentsExample {
             { file10, file9, file9  }
         });
         
-        other.setComponents(new Component[][]{
+        main.addGroup("Buttons",new Component[][]{
             { label,  image, button },
             { button2, button2,button2 },
-            { combo,  combo2, null  }
+            { combo,  combo2, null  },
+            { bg1,    bg2,   bg3}
         });
         
-        main.setComponents(new Component[][]{
-            { fields },
-            { other  } 
-        });
         
         return main;
         
